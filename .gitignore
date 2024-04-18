@@ -1,0 +1,17 @@
+.ipynb_checkpoints/*
+figures/*
+slurm_logs/*
+vcf_comparison-master/*
+vcf_comparsion-master/bin/*
+vcf_comparsion-master/main.nf
+CombineStarTabFiles.py
+custom_vcf_filter.py
+dotrevive.py
+headfix.py
+index_dir.py
+PlotAndFilterSamplesOnMetrics.py
+*.pdf
+*.gz
+summary.r
+samplesWithPrediction_16_09_22_noOutliers.txt
+vcf_stats.py
