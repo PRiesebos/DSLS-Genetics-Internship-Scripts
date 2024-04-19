@@ -68,4 +68,6 @@ NXF_VER=21.10.6 ${nextflow_path}/nextflow run DataQC.nf \
 --genome_build ${genome_build} \
 --outdir ${output_path}  \
 -profile slurm,singularity \
+--plink_executable /groups/umcg-weersma/tmp01/tools/plink1/plink \
+--plink2_executable /groups/umcg-weersma/tmp01/tools/plink2/plink2 \
 -resume
