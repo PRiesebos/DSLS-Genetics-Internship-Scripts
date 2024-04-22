@@ -1,4 +1,4 @@
-Extra script for DSLS master internship at the UMCG genetics department.
+Extra scripts for DSLS master internship at the UMCG genetics department.
 
 TODO:
 - Add a header for each script
