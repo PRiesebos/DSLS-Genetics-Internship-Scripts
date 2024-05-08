@@ -13,6 +13,7 @@
 module load Java/1.8.0_144
 #module load singularity/3.5.3
 #module load squashfs/4.4
+module load R
 
 # If you follow the eQTLGen phase II cookbook and analysis folder structure,
 # some of the following paths are pre-filled.
@@ -68,6 +69,7 @@ NXF_VER=21.10.6 ${nextflow_path}/nextflow run DataQC.nf \
 --genome_build ${genome_build} \
 --outdir ${output_path}  \
 -profile slurm,singularity \
---plink_executable /groups/umcg-weersma/tmp01/tools/plink1/plink \
---plink2_executable /groups/umcg-weersma/tmp01/tools/plink2/plink2 \
+--plink_executable /groups/umcg-weersma/tmp01/tools/plink_eqtlgen/plink \
+--plink2_executable /groups/umcg-weersma/tmp01/tools/plink_eqtlgen/plink2 \
+--ExpSdThresh 10000000 \
 -resume
