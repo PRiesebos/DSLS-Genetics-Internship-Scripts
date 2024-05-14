@@ -11,7 +11,7 @@
 
 # These are needed modules in UT HPC to get Singularity and Nextflow running.
 # Replace with appropriate ones for your HPC.
-module load java/11.0.2
+module load Java/11.0.16
 #module load singularity/3.5.3
 #module load squashfs/4.4
 
