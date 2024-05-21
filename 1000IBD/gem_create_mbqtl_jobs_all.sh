@@ -29,7 +29,7 @@ MEMORY_GB='32'
 JAVA_LIB='Java/11-LTS'
 
 # and the executable
-MBQTL_LOC='/groups/umcg-franke-scrna/tmp03/software/MbQTL-1.4.2-SNAPSHOT-jar-with-dependencies.jar'
+MBQTL_LOC='/groups/umcg-franke-scrna/tmp01/software/MbQTL-1.4.2-SNAPSHOT-jar-with-dependencies.jar'
 
 # location of GTE
 GTE_LOC='/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/qtl/eqtl/annotations/g2e2d_1000IBD_dedup.tsv'
@@ -49,8 +49,6 @@ files=(${FEATURES_LOC}"/"${FEATURES_REGEX})
 # list all files that have the search
 for f in ${files[@]}
 do
-    if [[ ${f##*/} =~ ${FEATURES_REGEX} ]];
-    then
         # ${f} is the features file full path, we also need just the name
         fbasename=$(basename "${f}" .tsv.gz)
         # make basename posix compliant (i.e. no spaces etc.)
@@ -98,7 +96,6 @@ echo "java -jar "${MBQTL_LOC}" \\
 " >> ${job_location}
 
         done
-    fi
     
 done
 
