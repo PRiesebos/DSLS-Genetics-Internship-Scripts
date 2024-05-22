@@ -87,7 +87,7 @@ add_qval <- function(input_file, output_file, pval_column='pval_beta', qval_colu
   write.table(input_table, output_file_loc, row.names = F, col.names = T, sep = '\t', quote = F)
 }
 
-merge_chromosome_outputs <- function(prepend, append, chroms=1:20, verbose=T) {
+merge_chromosome_outputs <- function(prepend, append, chroms=1:22, verbose=T) {
   # we'll put them all in a list first
   output_per_chrom <- list()
   # check each chromosome
@@ -109,7 +109,7 @@ merge_chromosome_outputs <- function(prepend, append, chroms=1:20, verbose=T) {
 }
 
 
-get_mtc_top_effects <- function(prepend, append='-TopEffects.txt', chroms=1:20, pval_column='BetaAdjustedMetaP', verbose=T) {
+get_mtc_top_effects <- function(prepend, append='-TopEffects.txt', chroms=1:22, pval_column='BetaAdjustedMetaP', verbose=T) {
   # get the top effects
   top_effects <- merge_chromosome_outputs(prepend, append, chroms)
   # print progress
@@ -122,7 +122,7 @@ get_mtc_top_effects <- function(prepend, append='-TopEffects.txt', chroms=1:20, 
 }
 
 
-merge_and_mtc <- function(prepend, top_append='-TopEffects.txt', all_append='-AllEffects.txt.gz', chroms=1:20, pval_column='BetaAdjustedMetaP', verbose=T) {
+merge_and_mtc <- function(prepend, top_append='-TopEffects.txt', all_append='-AllEffects.txt.gz', chroms=1:22, pval_column='BetaAdjustedMetaP', verbose=T) {
   # get top effects with mtc
   mtc_top_effects <- get_mtc_top_effects(prepend, top_append, chroms, pval_column)
   # get the nominal effects
@@ -139,7 +139,7 @@ merge_and_mtc <- function(prepend, top_append='-TopEffects.txt', all_append='-Al
 }
 
 
-write_merge_and_mtc <- function(prepend, top_append='-TopEffects.txt', all_append='-AllEffects.txt.gz', chroms=1:20, pval_column='BetaAdjustedMetaP', verbose=T) {
+write_merge_and_mtc <- function(prepend, top_append='-TopEffects.txt', all_append='-AllEffects.txt.gz', chroms=1:22, pval_column='BetaAdjustedMetaP', verbose=T) {
   # get the combined effects
   all_effects_merged <- merge_and_mtc(prepend, top_append, all_append, chroms, pval_column)
   # set an output file
@@ -158,7 +158,7 @@ do_debug <- function() {
     prepend='/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/qtl/eqtl/output/bulk_', 
     top_append='-TopEffects.txt', 
     all_append='-AllEffects.txt.gz', 
-    chroms=1:20, 
+    chroms=1:22, 
     pval_column='BetaAdjustedMetaP')
 }
 
