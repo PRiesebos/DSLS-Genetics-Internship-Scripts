@@ -149,7 +149,7 @@ write_merge_and_mtc <- function(prepend, top_append='-TopEffects.txt', all_appen
     print(paste('writing output to', output_loc))
   }
   # write the result
-  write.table(all_effects_merged, row.names = F, col.names = T, sep = '\t', quote = F)
+  write.table(all_effects_merged, output_loc, row.names = F, col.names = T, sep = '\t', quote = F)
 }
 
 # debug function
