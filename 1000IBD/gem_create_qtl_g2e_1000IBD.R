@@ -34,6 +34,8 @@
 g2e_loc <- '/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/metadata/gem_dna_rna_sample_mapping.tsv'
 # read the file
 g2e <- read.table(g2e_loc, header = F, sep = '\t')
+# add the 'R' to each sample name
+g2e[['V2']] <- paste('R', g2e[['V2']], sep = '')
 # add the dataset column
 g2e[['V3']] <- '1000IBD'
 # set the output location
