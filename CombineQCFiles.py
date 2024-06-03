@@ -1,5 +1,5 @@
 """
-Author: Harm-Jan Westra, Edited by: Peter Riesebos
+Author: Harm-Jan Westra, Modified by: Peter Riesebos
 """
 
 import glob
@@ -72,7 +72,7 @@ files = glob.glob(alignmentDir+"/multiple_metrics/SRR*/multiple_metrics.insert_s
 samples = getSamplesFromDir(files)
 print("{} samples loaded sofar ".format(len(samples)))
 
-files = glob.glob(alignmentDir+"/rna_seq_metrics/SRR*/*_rnaseqmetrics.gz")
+files = glob.glob(alignmentDir+"/rna_seq_metrics/*_rnaseqmetrics.gz")
 samples.update(getSamples(files,"_rnaseqmetrics.gz"))
 print("{} samples loaded sofar ".format(len(samples)))
 

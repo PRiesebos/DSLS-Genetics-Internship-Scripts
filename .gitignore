@@ -14,4 +14,14 @@ PlotAndFilterSamplesOnMetrics.py
 *.gz
 summary.r
 samplesWithPrediction_16_09_22_noOutliers.txt
+work/*
 vcf_stats.py
+.nextflow/*
+.nextflow.log*
+*nextflow*
+sbatch_scripts/*
+*/.RData
+*/.Rhistory
+*/*.txt
+*/*.csv
+*.txt
