@@ -4,7 +4,7 @@ import os
 import subprocess
 
 # List of input directories
-input_dirs = ["SRP068609","SRP064952","SRP063496", "SRP076426", "SRP077046", "SRP096757", "SRP113470", "SRP189239", "SRP048801"]
+input_dirs = ["ERP109626","ERP113396","ERP114636","SRP063496", "SRP064952", "SRP068609", "SRP076426", "SRP077046", "SRP096757", "SRP113470", "SRP189239"]
 
 # Nextflow pipeline script
 nf_script = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/QCPipeline/main.nf"
@@ -25,7 +25,7 @@ set -u
 module load Java
 
 # Create the output directory
-output_dir="/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/{input_dir}-build44/genotypes"
+output_dir="/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/{input_dir}/genotypes"
 mkdir -p "$output_dir"
 
 # Create a temporary nextflow.config file with the current input directory
@@ -38,7 +38,7 @@ process.container = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/20
 
 // Adjust the params to your usecase.
 params {{
-    inputDir = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/{input_dir}-build44/genotypes"
+    inputDir = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/{input_dir}/genotypes"
     maf = 0.01 
     geno = 0.05 
     mind = 0.05 
