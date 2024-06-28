@@ -25,3 +25,4 @@ sbatch_scripts/*
 */*.txt
 */*.csv
 *.txt
+GenotypeHarmonizer-1.4.23/*
