@@ -100,9 +100,9 @@ echo "java -jar "${MBQTL_LOC}" \\
 done
 
 
-./gem_create_mbqtl_jobs_all.sh \
-/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/genotype/chrAll.filtered.vcf.gz \
-/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/qtl/eqtl/input/ \
-/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/qtl/eqtl/output/ \
-/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/qtl/eqtl/jobs/
+#./gem_create_mbqtl_jobs_all.sh \
+#/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/genotype/chrAll.filtered.vcf.gz \
+#/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/qtl/eqtl/input/ \
+#/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/qtl/eqtl/output/ \
+#/groups/umcg-weersma/tmp01/projects/gut_eqtl_meta_analysis/ongoing/qtl/eqtl/jobs/
 
