@@ -31,7 +31,7 @@ if len(files) > 0:
                         if len(elems) <= 11:
                                 print(line)
                                 continue
-                        pval = float(elems[11])
+                        pval = float(elems[12])
                         lines.append( [line.strip(), pval] )
                 fh.close()
                 fctr = fctr + 1
