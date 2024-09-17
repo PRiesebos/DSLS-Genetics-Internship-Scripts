@@ -4,17 +4,18 @@ import os
 import subprocess
 
 # Common parameters
-VCF_FILE = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/00-Final_files/final_sample_names_exp_filtered.vcf.gz"
+VCF_FILE = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/00-Final_files/final_sample_names_exp_filtered_30_cutoff.vcf.gz"
 EXPRESSION_DATA = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/00-Final_files/merged_expression_data_zeros.txt.gz"
 ANNOTATION_FILE = "/scratch/hb-functionalgenomics/projects/gut-bulk/reference/gencode_44_2023/annotation_file_build44_genes.tsv"
-LINK_FILE = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/00-Final_files/final_linkfile.txt"
+LINK_FILE = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/00-Final_files/final_linkfile_30_cutoff.txt"
 MODE = "mbqtl"
 PERMUTATIONS = 100
-OUTPUT_PREFIX = "pub_rna_perm100_all"
+OUTPUT_PREFIX = "pub_rna_30_cutoff_perm100_all_maf_0.05"
 MINGENOTYPECOUNT = 2
+MAF = 0.05
 
 # Path to the jar file
-JAR_PATH = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/users/umcg-priesebos/tools/MbQTL-1.5.0-SNAPSHOT-jar-with-dependencies.jar"
+JAR_PATH = "/scratch/hb-functionalgenomics/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/extra_scripts/MbQTL-1.5.0-SNAPSHOT-jar-with-dependencies.jar"
 
 # Directory to store the generated sbatch scripts
 OUTPUT_DIR = "mbqtl_sbatch_scripts"
@@ -22,12 +23,12 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # SBATCH script template
 sbatch_script_template = """#!/bin/bash
-#SBATCH --time=23:59:59
+#SBATCH --time=2:59:59
 #SBATCH --mem=32g
 #SBATCH --cpus-per-task=16
 #SBATCH -J mbqtl_chr{chr}
-#SBATCH -o mbqtl_logs/pub_rna_mbqtl_run_chr{chr}.log
-#SBATCH -e mbqtl_logs/pub_rna_mbqtl_run_chr{chr}.err
+#SBATCH -o new_mbqtl_logs/new_pub_rna_mbqtl_run_chr{chr}.log
+#SBATCH -e new_mbqtl_logs/new_pub_rna_mbqtl_run_chr{chr}.err
 
 module load java
 
@@ -41,8 +42,8 @@ java -jar {jar_path} \\
     -o {output_prefix}_chr{chr} \\
     --mingenotypecount {mingenotypecount} \\
     --chr {chr} \\
+    --maf {maf} \\
     --outputall
-
 """
 
 # Generate and submit sbatch scripts for each chromosome
@@ -57,7 +58,8 @@ for chr_num in range(1, 23):  # Chromosomes 1 to 22
         mode=MODE,
         permutations=PERMUTATIONS,
         output_prefix=OUTPUT_PREFIX,
-        mingenotypecount=MINGENOTYPECOUNT
+        mingenotypecount=MINGENOTYPECOUNT,
+        maf=MAF
     )
     script_path = os.path.join(OUTPUT_DIR, f"submit_chr{chr_num}.sh")
     
