@@ -6,12 +6,12 @@ import subprocess
 
 # Common parameters
 VCF_FILE = "/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/datasets/combined/combined_vcf_files.vcf.gz"
-EXPRESSION_DATA = "/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/datasets/combined/combined_expression_matrix_protein_coding_filtered.txt.gz"
+EXPRESSION_DATA = "/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/datasets/combined_expression_matrix_protein_coding_filtered_no_zeros.txt.gz"
 ANNOTATION_FILE = "/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/references/gencode_44_2023/annotation_file_build44_genes_no_version.tsv"
-LINK_FILE = "/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/datasets/GTEx/tweaked_files/linkfile_gtex_final.txt"
+LINK_FILE = "/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/datasets/combined/combined_linkfile.txt"
 MODE = "mbqtl"
 PERMUTATIONS = 100
-OUTPUT_PREFIX = "gtex_no_ver"
+OUTPUT_PREFIX = "combined"
 MINGENOTYPECOUNT = 2
 MAF = 0.05
 
@@ -19,17 +19,17 @@ MAF = 0.05
 JAR_PATH = "/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/MbQTL-1.5.0-SNAPSHOT-jar-with-dependencies.jar"
 
 # Directory to store the generated sbatch scripts
-OUTPUT_DIR = "mbqtl_output_gtex_no_version"
+OUTPUT_DIR = "combined"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # SBATCH script template
 sbatch_script_template = """#!/bin/bash
-#SBATCH --time=4:00:00
+#SBATCH --time=4:45:00
 #SBATCH --mem=32gb
 #SBATCH --cpus-per-task=16
-#SBATCH -J mbqtl_logs/gtex_no_ver_{chr}
-#SBATCH -o mbqtl_logs/gtex_no_ver_{chr}.log
-#SBATCH -e mbqtl_logs/gtex_no_ver_{chr}.err
+#SBATCH -J combined/combined_{chr}
+#SBATCH -o combined/combined_{chr}.log
+#SBATCH -e combined/combined_{chr}.err
 
 module load Java/11-LTS
 
@@ -45,7 +45,6 @@ java -jar {jar_path} \\
     --chr {chr} \\
     --maf {maf} \\
     --outputall
-
 """
 
 # Generate and submit sbatch scripts for each chromosome

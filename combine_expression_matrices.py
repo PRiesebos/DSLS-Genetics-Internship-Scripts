@@ -34,8 +34,8 @@ def combine_expression_matrices(files):
         else:
             combined_df = pd.merge(combined_df, df, on="gene", how="outer")
 
-    # Fill missing values with 0 after merging
-    combined_df = combined_df.fillna(0)
+    # # Fill missing values with 0 after merging
+    # combined_df = combined_df.fillna(0)
 
     return combined_df
 
@@ -56,7 +56,7 @@ files = ['/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRN
 combined_df = combine_expression_matrices(files)
 
 # Save the result
-output_file = '/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/datasets/combined_expression_matrix.txt.gz'
+output_file = '/groups/umcg-fg/tmp04/projects/gut-bulk/ongoing/2024-02-07-GutPublicRNASeq/datasets/combined_expression_matrix_no_zeros.txt.gz'
 save_combined_matrix(combined_df, output_file)
 
 print(f"Combined matrix saved to {output_file}")
