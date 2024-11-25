@@ -549,80 +549,163 @@ Below is a description of each script, including its purpose, expected input, an
 ---
 
 ### **coloc Folder**
-- **`coloc.R`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+This folder contains scripts for performing colocalization analysis between GWAS and eQTL data, including filtering eQTL and GWAS variants, and generating summary results for each gene.
+- **`coloc.r`**
+
+  **_Purpose:_**  
+  This script runs colocalization analysis between GWAS and eQTL data for each gene using the `coloc` R package. It processes multiple input files containing GWAS and eQTL variants per gene, performs colocalization, and outputs a summary table with key results for each gene.
+
+  **_Input:_**  
+  - A set of TSV files containing both GWAS and eQTL variants for each gene. Each file includes columns such as `Gene`, `GeneSymbol`, `SNP`, `MetaBeta`, `MetaP`, `SNPPos`, etc.
+  - Each file represents a gene, containing data for both GWAS and eQTL SNPs, along with associated p-values and other relevant information.
+
+  **_Output:_**  
+  - For each input file, a summary results file is generated, containing the following information:
+    - Gene name (`gennaam`), gene symbol (`gensymbol`), and gene position (`TSS`).
+    - Posterior probabilities (PP3 and PP4) from colocalization.
+    - The top SNP from both the GWAS and eQTL data, including p-values and positions.
+    - The distance between the top GWAS and eQTL SNPs, as well as distances between the top SNPs and the transcription start site (TSS).
+  - Results are saved as tab-separated text files in a designated output directory.
+  - If errors occur during processing, the script logs the problematic files for further investigation.
+
 
 - **`filter_eqtls_for_coloc.py`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+
+  **_Purpose:_**  
+  This script filters eQTL variants based on their proximity to the transcription start site (TSS) for use in colocalization analysis. It processes the eQTL top effects and AllEffects files, retaining only the variants that fall within a 200kb window around the TSS of significant genes.
+
+  **_Input:_**  
+  - **eQTL top effect file**: Contains information about significant eQTL effects for genes. This file is used to identify the genes that will be analyzed.
+  - **eQTL AllEffects file**: Contains all eQTL variants, including information about SNP positions and gene annotations. The SNPs that fall within a 200kb window around the TSS of significant genes are retained for further analysis.
+
+  **_Output:_**  
+  - A filtered eQTL summary statistics file for each chromosome, containing only the SNPs that are within 200kb of the TSS of significant genes.
+  - A list of eQTL SNP IDs that are within the 200kb window for each chromosome, saved as a separate file.  
+
 
 - **`filter_gwas_for_eqtlsnps_for_coloc.py`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
 
+  **_Purpose:_**  
+  This script filters GWAS summary statistics based on overlap with eQTL SNPs. For each chromosome, it retains only those GWAS variants that correspond to eQTL SNPs identified in the filtering step of the eQTL data. This is done by comparing the SNP rsids between the GWAS and eQTL data.
+
+  **_Input:_**  
+  - **Filtered eQTL SNPs file**: Contains SNPs that are within a 200kb window of the TSS of significant eQTL genes. This file is used to identify the SNPs that need to be considered in the GWAS data.
+  - **GWAS summary statistics**: Includes a list of GWAS variants with corresponding information such as SNP rsid and chromosome. These are filtered by matching SNP rsids with those in the filtered eQTL SNPs file.
+
+  **_Output:_**  
+  - For each chromosome (1-22), a filtered GWAS variants file is generated, containing only the variants whose SNP rsids are present in the filtered eQTL SNP list. These are saved as `.tsv.gz` files for each chromosome (e.g., `GCST90292538.h_filtered_eQTLSNPs_200kb-chr1.tsv.gz`, `GCST90292538.h_filtered_eQTLSNPs_200kb-chr2.tsv.gz`, etc.).  
 ---
 
 ### **eQTL_Scripts Folder**
+This folder contains scripts for processing eQTL data, including merging top effect files, calculating q-values, and filtering significant effects based on q-values.
 - **`1-merge_top_effects.py`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+
+  **_Purpose:_**  
+  This script processes files containing top effect data from eQTL analyses. It extracts the p-values from each file, sorts the lines by these p-values, and writes the sorted lines into a new output file. The script is designed to handle multiple input files and combine them into a single output file with sorted lines based on p-values.
+
+  **_Input:_**  
+  - **Input directory (`dir`)**: The directory containing files with top effect data (e.g., `*-TopEffects.txt` files). These files include information such as SNPs, p-values, and gene information (mbQTL output).
+  - **Output file (`out`)**: The path to the file where the sorted lines will be written. The output will contain the same content as the input files, but sorted by the p-values.
+
+  **_Output:_**  
+  - A single file containing the sorted lines from all input files based on p-values. The output file will retain the header from the first input file and will contain the data from all the input files sorted by p-value in ascending order.  
+
 
 - **`2-calculate_q_values.R`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+
+  **_Purpose:_**  
+  This R script calculates the q-values for a given dataset using the `qvalue` package, performs some additional calculations related to p-values, and writes the processed data to an output file. Specifically, the script reads a dataset, calculates the q-values based on the `BetaAdjustedMetaP` column, and determines a nominal p-value threshold for each gene. It also ensures that any previously calculated q-values are removed from the dataset before re-calculating and appending the new values.
+
+  **_Input:_**  
+  - **Input file (`input`)**: A tab-delimited file with multiple columns, including `BetaAdjustedMetaP`, `BetaDistAlpha`, and `BetaDistBeta`. The script expects this file to be pre-processed and may contain previously computed q-values (output from `1-merge_top_effects.py`).
+  
+  **_Output:_**  
+  - **Output file (`output`)**: A tab-delimited file with the same columns as the input file, but with two new columns: `PvalueNominalThreshold` and `qval`. The data is also ordered by the `qval` column, with rows containing missing `BetaAdjustedMetaP` values removed.
+
 
 - **`3-count_significant_effects.py`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
 
+  **_Purpose:_**  
+  This Python script filters a dataset by the `qval` column, keeping only rows with a q-value less than 0.05 (typically considered statistically significant). The script reads an input file, checks for the presence of the `qval` column, and writes the filtered rows to an output file. It also reports the number of significant rows (those with a q-value less than 0.05).
+
+  **_Input:_**  
+  - **Input file (`infile.txt`)**: A tab-delimited file containing a `qval` column, along with other columns of data. The script expects this file to be in a format where the columns are separated by tabs and the `qval` column contains numeric values representing q-values (output from `2-calculate_q_values.R`).
+
+  **_Output:_**  
+  - **Output file (`outfile.txt`)**: A tab-delimited file containing only the rows from the input file where the q-value is less than 0.05. This file will include the header and only the significant rows.
 ---
 
 ### **1000G_comparison_scripts Folder**
+
+The following steps prepare a public RNA-seq dataset for analysis by applying different quality control (QC) thresholds. This process allows us to evaluate the number of remaining variants at each threshold. We then compare the Minor Allele Frequency (MAF) between the RNA-seq study and the 1000 Genomes dataset, calculating the Pearson correlation for each QC threshold combination.
+
+1. **Filtering of VCF files**: Variants are filtered based on different Minor Allele Frequency (MAF), Call Rate (CR), and Depth (DP) parameters to ensure that only high-quality variants are considered for analysis.
+2. **Frequency Calculation**: The allele frequencies of the filtered variants are calculated using PLINK, providing a measure of the genetic variation in the study.
+3. **Annotation Fixing**: The frequency files are corrected using a custom annotation script to ensure consistency and accuracy for downstream analysis.
+
+
 - **`step_1_filter_comparison.sh`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+
+  **_Purpose:_**  
+  This script automates the process of filtering a VCF file using different parameter thresholds for Minor Allele Frequency (MAF), Call Rate (CR), and Depth (DP). It submits multiple SLURM batch jobs for each set of parameter values, running the `custom_vcf_filter.py` script with the respective thresholds, and generates filtered VCF files for each parameter combination.
+
+  **_Input:_**  
+  - **VCF file (`vcf_file_dir`)**: The input VCF file containing genetic data that needs to be filtered.
+  - **Filter script (`filter_script_dir`)**: The path to the Python script (`custom_vcf_filter.py`) that performs the filtering based on the specified parameters.
+  
+  **_Output:_**  
+  - Filtered VCF files for each combination of MAF, CR, and DP thresholds. These output files are saved in the specified `output_vcf_dir` with names indicating the specific parameters used for filtering (e.g., `maf_0.01_output.vcf.gz`, `cr_0.5_output.vcf.gz`, etc.).
+  - SLURM batch job logs for each filtering step, saved in the `slurm_logs` directory, detailing the progress and output of each filtering job.
+
 
 - **`step_1_filter_comparison_test.sh`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+same  as **`step_1_filter_comparison.sh`** except it's testing fewer QC tresholds as a test run. 
+
 
 - **`step_2_freq_calc_plink.sh`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+
+  **_Purpose:_**  
+  This script runs the PLINK tool on a set of VCF files to calculate allele frequencies. It processes all `.vcf.gz` files found in the specified VCF output directory (`$output_vcf_dir`), running a separate SLURM job for each file. For each VCF file, the script uses PLINK's `--freq` command to generate allele frequency data and saves the results in a specified output directory (`$freq_dir`).
+
+  **_Input:_**  
+  - **VCF files (`*.vcf.gz`)**: A set of VCF files containing genotype data, which are used as input for the PLINK tool. These files are located in the `$output_vcf_dir` directory.
+  
+  **_Output:_**  
+  - **Frequency files**: For each input VCF file, a corresponding frequency output file is generated, containing allele frequency information. The output files are saved in the `$freq_dir` directory, with the same base name as the input VCF file but without the `.vcf.gz` extension (e.g., `file1.freq`).
+
 
 - **`step_3_fix_annot.sh`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+
+  **_Purpose:_**  
+  This script runs the `fix_annot.py` script on a set of frequency files generated in the previous step. It processes all `.frq` files found in the specified frequency output directory (`$freq_dir`), running a separate SLURM job for each file. The script applies the annotation fix through the `fix_annot.py` script and saves the fixed frequency data in a designated output directory (`$fixed_freq_dir`).
+
+  **_Input:_**  
+  - **Frequency files (`*.frq`)**: A set of frequency files generated from the previous PLINK step, located in the `$freq_dir` directory. These files contain allele frequency data for each variant in the VCF files.
+
+  **_Output:_**  
+  - **Fixed frequency files**: For each input frequency file, a corresponding fixed frequency output file is generated by applying the `fix_annot.py` script. The output files are saved in the `$fixed_freq_dir` directory, with the same base name as the input frequency file but with the `_fixed` suffix added (e.g., `file1_fixed.frq`).
+
+  **_SLURM Job Setup:_**  
+  - A new SLURM job is created for each frequency file, with resource allocation specified for each task:
+    - **Memory**: 32 GB
+    - **CPUs**: 1
+    - **Time**: 8 hours
+  - The job output logs are saved in the `slurm_logs` directory, with a name based on the frequency file being processed.
+
 
 ---
 
 ### **1000G_comparison_scripts (fixed_maf) Folder**
+
+These three scripts are identical to the ones in the **1000G_comparison_scripts Folder** section but with the use of a fixed MAF threshold for filtering the variants.
 - **`step_1_filter_comparison_fixed_maf.sh`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+same as step_1_filter_comparison.sh
 
 - **`step_2_freq_calc_plink_fixed_maf.sh`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
+ same as step_2_freq_calc_plink.sh
 
 - **`step_3_fix_annot_fixed_maf.sh`**  
-  _Purpose:_  
-  _Input:_  
-  _Output:_  
-
+same as step_3_fix_annot_fixed.sh
 ---
 
 ### **jupyter_notebooks Folder**
@@ -768,5 +851,8 @@ Below is a description of each script, including its purpose, expected input, an
 1. Clone this repository to your local machine or server.
 2. Navigate to the relevant folder containing the scripts you wish to use.
 3. Make sure you have the required input files, and relevant tools/libraries.
-4. Run the script according to the instructions provided in the script or within its corresponding notebook.
+4. Install the necessary dependencies by running:
+   ```bash
+   pip install -r requirements.txt
+5. Run the script according to the instructions provided in the script, github readme or within its corresponding notebook.
 
