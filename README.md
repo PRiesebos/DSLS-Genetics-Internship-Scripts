@@ -722,5 +722,7 @@ Each Jupyter Notebook in this repository includes its own detailed documentation
 4. Install the necessary dependencies by running:
    ```bash
    pip install -r requirements.txt
-5. Run the script according to the instructions provided in the script, github readme or within its corresponding notebook.
+5. Ensure all R packages required for running the R scripts are installed.
+A complete list of these packages can be found in the R_packages.txt file.
+6. Run the script according to the instructions provided in the script, the README file, or within its corresponding notebook.
 
