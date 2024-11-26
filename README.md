@@ -709,7 +709,9 @@ same as step_3_fix_annot_fixed.sh
 ---
 
 ### **jupyter_notebooks Folder**
-Each Jupyter Notebook in this repository includes its own detailed documentation, code annotations, and usage examples. Please review the notebooks individually for comprehensive insights
+  
+Each Jupyter Notebook in this repository includes its own detailed documentation, code annotations, and usage examples. Please review the notebooks individually for comprehensive insights.  
+  
 ---
 
 ### How to Use
